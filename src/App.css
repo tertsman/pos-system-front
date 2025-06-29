@@ -1,0 +1,482 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+#root {
+    /* max-width: 1280px; */
+    margin: 0 ;
+    padding: 0;
+    font-family: "Poppins", serif;
+    /* padding: 2rem; */
+    /* text-align: center; */
+  }
+*
+{
+  font-family: "Poppins", serif;
+}
+  h2{
+    font-family: "Poppins", serif;
+  }
+
+
+  /* .logout{
+    width: 200px;
+    height: 100px;
+    background-color: aliceblue;
+    padding: 10px;
+  } */
+
+  :where(.css-dev-only-do-not-override-1wwf28x).ant-form-item{
+    margin-bottom: 10px;
+  }
+
+
+  .image{
+    object-fit: cover;
+  }
+  .image img{
+    width: 100%;
+    height: 100%;
+    
+  }
+  .info h1{
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: capitalize !important;
+    color: rgba(8, 211, 237, 0.814);
+    text-align: center;
+  }
+  .info p{
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(0 0 0 0.2);
+    text-align: center;
+    text-transform: capitalize !important;
+    
+  }
+  .info .discount {
+    font-size: 14px;
+    color: brown;
+    margin-top: 5px;
+  }
+  .info .price {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.337);
+    margin-top: 5px;
+    text-decoration: line-through;
+  }
+  .info .price-final{
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(8, 211, 237, 0.814);
+    margin-top: 5px;
+  }
+  .info .brand_category{
+    font-size: 13px;
+    color: brown;
+    font-weight: 600;
+  }
+  .billList{
+    width: 100%;
+    padding-left: 10px;
+  
+  }
+  .billList .bilList_main{
+    
+    width: 100%;
+    padding: 5px;
+    /* min-height: 300px; */
+    overflow: hidden;
+    background-color: rgb(244, 244, 245);
+  }
+  .billList .bilList_main h1{
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+    padding-bottom: 5px;
+
+  }
+  .billList .bilList_main .table{
+    overflow:hidden;
+    width: 100%;
+    overflow-x: hidden;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+  }
+  .billList .bilList_main table {
+    vertical-align: middle;
+    table-layout: auto;
+    width: 100%;
+
+   
+  }
+  .billList .bilList_main table tr{
+    vertical-align: middle;
+    align-items: center;
+  }
+  .billList .bilList_main table thead{
+    text-align: center;
+  }
+  
+  .billList .bilList_main table thead th{
+    background-color: rgb(220, 219, 219);
+    text-transform: capitalize;
+    color: rgb(2, 34, 34);
+    font-size: 13px;
+    width: 100%;
+    padding: 7px;
+
+  }
+  .billList .bilList_main table thead th:first-child{
+    text-align: left;
+    border-top-left-radius: 15px;
+  }
+  .billList .bilList_main table thead th:last-child{
+    border-top-right-radius: 15px;
+  }
+   .billList .bilList_main table tbody .imageWrapper{
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    padding: 2px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 5px;
+
+   }
+   .billList .bilList_main table tr{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    
+   }
+   .billList .bilList_main table tbody .imageWrapper img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+   }
+   .billList .bilList_main table tbody tr td .itemName{
+    font-size: 12px;
+    font-weight: 500;
+    color: black;
+    margin-bottom: 0;
+    margin-left: 5px;
+    transition: all .3s ease;
+    cursor: pointer;
+   }
+   .billList .bilList_main table tbody tr td .itemName:hover{
+    color: rgba(8, 211, 237, 0.814);
+   }
+   .quantity{
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  gap: 5px;
+   }
+   .quantity input{
+  width: 18px;
+  border: none;
+  outline: none;
+  text-align: center;
+  background-color: transparent;
+  font-size: 12px;
+}
+.quantity button{
+  min-width: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+  border:1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(214, 246, 243, 0.242) !important;
+  display: flex;
+  justify-content: center;
+  align-items:  center;
+}
+.imageWrapperItem{
+  width: 100px;
+}
+.cartPrice{
+  font-size: 13px;
+  color: rgba(8, 211, 237, 0.814);
+  font-weight: 600;
+  margin-left: 10px;
+}
+.billList .bilList_main .remove{
+  margin-left: 25px;
+  cursor: pointer;
+  border: 1px solid rgba(177, 4, 4, 0.69);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: rgb(129, 0, 0);
+  background-color: rgba(244, 94, 94, 0.181);
+
+}
+.billList .bilList_main .remove:hover svg{
+  color: red;
+}
+.billListFooter .cardDetails h4{
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(8, 211, 237, 0.814);
+  text-transform: capitalize;
+}
+.billList .emty{
+  width: 100%;
+  height: 100%;
+  margin-top: 40px;
+  margin-left: 60px;
+}
+.billList table tbody{
+    width: 100%;
+    overflow: auto;
+    align-items: center;
+}
+::-webkit-scrollbar {
+  width: 4px !important;
+  height: 3px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #2bbef0;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+
+}
+.clearAll{
+  padding: 5px 12px ;
+  background-color: rgba(247, 247, 247, 0.201);
+  border: 1px solid rgba(0, 0, 0, 0.133) !important;
+  font-size: 13px ;
+  color: rgba(0,0,0,0.7);
+  border-radius: 5px;
+}
+.check_container{
+  /* display: flex; */
+  width: 100%;
+  padding: 10px 25px;
+}
+.check_container .check_action{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+.check_container .select_option{
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+
+
+.checkOut{
+  border: 1px solid ;
+  padding: 10px 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  background-color: #2bbef0;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all .2s ease;
+  width: 100%;
+  
+}
+.checkOut:hover{
+  background-color: #138bb3;
+}
+
+.paidContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.paidContainer p{
+  font-size: 14px;
+  font-weight: 500;
+}
+.paid{
+  padding-left: 10px;
+  outline: none ;
+  width: 70%;
+  height: 100%;
+
+}
+.paid:focus{
+  /* border: 1px solid cyan; */
+  box-shadow: rgba(61, 202, 238, 0.15) 1.95px 1.95px 2.6px;
+}
+.remark{
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ margin-top: 10px;
+  margin-bottom: 10px;
+}
+.remark textarea{
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0 0 0 0.2);
+  outline: none;
+  padding-left: 10px;
+ 
+}
+.remark textarea:focus{
+  border: rgba(8, 168, 217, 0.462) 1.95px 1.95px 2.6px;
+  /* box-shadow: ; */
+}
+/* CSS example */
+.checkOut:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ========== */
+
+.invoice{
+  width: 80mm;
+  padding: 4px;
+  border: 1px dashed ;
+ 
+}
+
+.headInvoice{
+  text-align: center;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+.headInvoice h1{
+ font-size: 16px;
+ font-size: 600;
+ text-transform: uppercase;
+ color: #2bbef0;
+ 
+
+}
+.headInvoice h2{
+  font-size: 13px ;
+  font-weight: 400;
+  
+}
+.itemRef {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.bodyInvoice .invoiceList{
+ width: 100%;
+}
+.bodyInvoice .invoiceList tr{
+  padding: 10px;
+}
+.bodyInvoice .invoiceList thead{
+  padding: 8px;
+}
+.bodyInvoice .invoiceList thead tr th{
+ width: 100%;
+ padding: 8px;
+ font-size: 12px ;
+ font-weight: 500;
+
+}
+
+.bodyInvoice .invoiceList thead tr th:first-child{
+  text-align: left;
+}
+.bodyInvoice .invoiceList thead tr{
+ /* border: 1px dashed; */
+ border-bottom: 1px dashed;
+ border-top: 1px dashed;
+}
+.bodyInvoice .invoiceList tbody{
+  padding: 8px;
+}
+.bodyInvoice .invoiceList tbody tr td{
+  font-size: 12px;
+  font-weight: 400;
+  padding: 8px;
+
+}
+
+.bodyInvoice .invoiceList tbody .subtotal {
+  border-top: 1px dashed ;
+  border-bottom: 1px dashed ;
+}
+.footInvoice span{
+  font-size: 12px;
+  
+}
+
+.qrCode{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-left: auto;
+  top: 20px;
+  border-top: 1px dashed;
+  padding-top: 15px;
+}
+.qrCode p{
+  font-size: 12px;
+  font-weight: 500;
+  color: #ccc;
+}
+.qrCode .imageWrapper{
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  margin-top: 5px;
+  margin-bottom: 10px;
+
+}
+
+.qrCode .imageWrapper img{
+  width: 100%;
+  height: 100%;
+}
+
+:where(.css-dev-only-do-not-override-1wwf28x).ant-menu .ant-menu-item .ant-menu-item-icon{
+  font-size: 21px;
+  margin-top: -5px;
+}
+.demo-logo-vertical{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  
+  margin-bottom: 0;
+}
+.logoImageWrapper{
+  width: 100px;
+  height: 100px;
+ 
+}
+
+/* :where(.css-dev-only-do-not-override-1wwf28x).ant-layout-sider{
+  background-color: #ccc;
+}
+:where(.css-dev-only-do-not-override-1wwf28x).ant-menu-dark{
+  background-color: #ccc;
+} */

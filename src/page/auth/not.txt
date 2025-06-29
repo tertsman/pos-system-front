@@ -1,0 +1,16 @@
+const onLogin = async (item) => {
+  var param = {
+    username: item.username,
+    password: item.password,
+  };
+
+  const res = await request("auth/login", "post", param);
+  if (res && !res.error) {
+    setAccessToken(res.access_token);
+    setProfile(JSON.stringify(res.profile));
+    navigate("/");
+  } else {
+    alert(JSON.stringify(res));
+    // alert("nolog")
+  }
+};
