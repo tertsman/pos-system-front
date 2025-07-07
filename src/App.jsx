@@ -19,7 +19,9 @@ import EmployeePage from './page/employee/EmployeePage'
 import PayrollPage from './page/employee/PayrollPage'
 import PosPage from './page/pos/PosPage'
 import OrderPage from './page/pos/OrderPage'
-
+import PurchasePage from './page/puchase/PuchasePage'
+import PurchaseList from './page/puchase/PurchaseList'
+import RolePermissionPage from './page/user/RolePermissionPage'
 
 function App() {
  
@@ -31,20 +33,24 @@ function App() {
     <Routes>
       {/* Main layout */}
       <Route element={<MainLayout/>}>
-      <Route path="/" element={<HomePage/>} />
+      <Route path="/" element={  <HomePage/> } />
       <Route path="/pos" element={<PosPage/>} />
       <Route path="/order" element={<OrderPage/>} />
       <Route path="/customer" element={<CustomerPage/>} />
-      <Route path="/category/category" element={<CategoryPage/>} />
       <Route path="/product_list" element={<ProductPage/>} />
+      <Route path="/category/category" element={<CategoryPage/>} />
       <Route path="/brands" element={<BrandPage/>} />
       <Route path="/employee" element={<EmployeePage/>} />
       <Route path="/payroll" element={<PayrollPage/>} />
       <Route path="/expanse_type" element={<ExpanseTypePage/>} />
       <Route path="/expanse_list" element={<ExpansePage/>} />
       <Route path="/role" element={<RolePage/>} />
+      <Route path="/role/permission" element={<RolePermissionPage/>} />
       <Route path="/user_list" element={<UserPage/>} />
       <Route path="/supplier" element={<SupplierPage/>} />
+      <Route path="/purchaseProduct" element={<PurchasePage/>} />
+      <Route path="/purchaseList" element={<PurchaseList/>} />
+      {/* <Route path="/attendance" element={<AttendanceEmployee/>} /> */}
       <Route path="*" element={<h1>404 Route Not Found</h1>} />
       </Route>
       {/* Main Layout login */}

@@ -480,3 +480,15 @@
 :where(.css-dev-only-do-not-override-1wwf28x).ant-menu-dark{
   background-color: #ccc;
 } */
+.loginPage :where(.css-dev-only-do-not-override-1wwf28x).ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-form-item-label{
+  font-size: 18px;
+}
+.loginPage :where(.css-dev-only-do-not-override-1wwf28x).ant-input-outlined{
+  padding: 8px !important;
+}
+
+.loginPage :where(.css-dev-only-do-not-override-1wwf28x).ant-input-affix-wrapper >input.ant-input{
+  padding: 5px;
+  border-radius: 5px !important;
+  background: transparent !important;
+}

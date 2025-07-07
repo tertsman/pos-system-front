@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Modal, Select, Space, Table, DatePicker, message } from "antd";
 import dayjs from "dayjs";
 import MainPage from "../../component/layout/MainPage";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 
 const ExpansePage = () => {
   const [form] = Form.useForm();
@@ -115,7 +115,7 @@ const ExpansePage = () => {
           <h2 className="text-xl font-semibold">Expanse</h2>
           <Input.Search placeholder="Search" onSearch={onSearch} allowClear />
         </Space>
-        <Button onClick={handleOpen} type="primary">New</Button>
+       {checkPermission("expanse.create") && <Button onClick={handleOpen} type="primary">New</Button>}
       </div>
 
       <Table
@@ -136,8 +136,8 @@ const ExpansePage = () => {
             title: "Actions",
             render: (item) => (
               <Space>
-                <Button onClick={() => handleEdit(item)} type="link">Edit</Button>
-                <Button danger type="link" onClick={() => handleDelete(item)}>Delete</Button>
+               {checkPermission("expanse.update") && <Button onClick={() => handleEdit(item)} type="link">Edit</Button>}
+               {checkPermission("expanse.remove") && <Button danger type="link" onClick={() => handleDelete(item)}>Delete</Button>}
               </Space>
             ),
           },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 import {
   Button,
   Col,
@@ -23,11 +23,10 @@ import { PlusOutlined } from "@ant-design/icons";
 import { MdAdd } from "react-icons/md";
 import MainPage from "../../component/layout/MainPage";
 import dayjs from "dayjs";
-import * as XLSX from 'https://unpkg.com/xlsx/xlsx.mjs';
-import {saveAs} from "file-saver";
-
-
-
+import * as XLSX from "https://unpkg.com/xlsx/xlsx.mjs";
+import { saveAs } from "file-saver";
+import { config } from "../../util/config";
+import AttendanceEmployee from "./AttendanceEmployee";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -48,21 +47,27 @@ const ProductPage = () => {
     },
   });
 
-
   // filter
   const [filter, setFilter] = useState({
     txt_search: "",
     category_id: "",
     brand: "",
   });
-
+  const [imageDefault, setimageDefault] = useState([]);
   useEffect(() => {
     getList(1, state.pagination.limit);
   }, [filter]); // ✅ Dependency added
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const [imageDefault, setimageDefault] = useState([]);
+  const [showAttendanceModal, setShowAttendanceModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+
+  // Handle open attendance
+  const handleOpenAttendance = (employee) => {
+    setSelectedEmployee(employee);
+    setShowAttendanceModal(true);
+  };
 
   const uploadButton = (
     <button
@@ -110,13 +115,13 @@ const ProductPage = () => {
       var params = new FormData();
       params.append("full_name", items.full_name);
       params.append("gender", items.gender);
-     params.append("date_of_birth", items.date_of_birth.format("YYYY-MM-DD"));
+      params.append("date_of_birth", items.date_of_birth.format("YYYY-MM-DD"));
       params.append("email", items.email);
       params.append("phone", items.phone);
       params.append("position", items.position);
       params.append("salary_type", items.salary_type);
       params.append("salary_amount", items.salary_amount);
-     params.append("start_date", items.start_date.format("YYYY-MM-DD"));
+      params.append("start_date", items.start_date.format("YYYY-MM-DD"));
       params.append("status", items.status);
       params.append("photo", form.getFieldValue("photo"));
       const id = form.getFieldValue("id");
@@ -131,7 +136,6 @@ const ProductPage = () => {
           params.append("upload_image", file.originFileObj, file.name); // បញ្ជូនរូបភាពថ្មី
         }
       }
-    
 
       console.log(items.image_default);
       const method = id ? "put" : "post";
@@ -147,6 +151,60 @@ const ProductPage = () => {
       message.error("Error during the update process. Please try again.");
     }
   };
+
+  // const onFinish = async (items) => {
+  //   try {
+
+  //     const params = new FormData();
+
+  //     params.append("full_name", items.full_name);
+  //     params.append("gender", items.gender);
+  //     params.append("date_of_birth", items.date_of_birth.format("YYYY-MM-DD"));
+  //     params.append("email", items.email);
+  //     params.append("phone", items.phone);
+  //     params.append("position", items.position);
+  //     params.append("salary_type", items.salary_type);
+  //     params.append("salary_amount", items.salary_amount);
+  //     params.append("start_date", items.start_date.format("YYYY-MM-DD"));
+  //     params.append("status", items.status);
+
+  //   //   if (imageDefault.length === 0) {
+  //   //   params.append("image_remove", "1"); // user ចង់លុបរូប
+  //   // } else {
+  //   //   const file = imageDefault[0];
+  //   //   if (file.originFileObj) {
+  //   //     params.append("upload_image", file.originFileObj, file.name); // user upload រូបថ្មី
+  //   //   }
+  //   // }
+
+  // if (items.image_default) {
+  //         const file = items.image_default.file;
+  //         if (file.status === "removed") {
+  //           params.append("image_remove", "1"); // បញ្ជូនសម្រាប់លុបរូបភាពចាស់
+  //         } else {
+  //           params.append("upload_image", file.originFileObj, file.name); // បញ្ជូនរូបភាពថ្មី
+  //         }
+  //       }
+
+  //   // Append id if editing
+  //   const id = form.getFieldValue("id");
+  //   if (id) {
+  //     params.append("id", id);
+  //   }
+
+  //     const method = id ? "put" : "post";
+  //     const res = await request("employee", method, params);
+
+  //     if (res && !res.error) {
+  //       message.success(res.message);
+  //       getList();
+  //       handleCloseModal();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     message.error("Error during update.");
+  //   }
+  // };
 
   // =========================
 
@@ -175,21 +233,18 @@ const ProductPage = () => {
     setPreviewOpen(true);
   };
 
-
   const handleChangeDefault = ({ fileList: newFileList }) => {
-    console.log("New File List: ", newFileList);
-
-    // ពិនិត្យតើ fileList មានរូបភាពទេ
+    console.log("handleChangeDefault newFileList:", newFileList);
     if (newFileList.length > 1) {
       message.error("Only one image is allowed.");
-    } else if (newFileList.length === 0) {
-      // ការផ្តល់ការជូនដំណឹងបើមិនមានរូបភាពណាមួយ
-      setimageDefault([]);
     } else {
-      // កែប្រែរូបភាពតាមបញ្ជីថ្មី
       setimageDefault(newFileList);
     }
   };
+  // const handleChangeDefault = ({ fileList: newFileList }) => {
+  //   console.log("handleChangeDefault newFileList:", newFileList);
+  //   setimageDefault(newFileList);
+  // };
 
   const onFilter = () => {
     getList();
@@ -200,7 +255,7 @@ const ProductPage = () => {
   const handleDelete = (item) => {
     Modal.confirm({
       title: "Remove data",
-      content: "Are you sure to delete product?",
+      content: "Are you sure to delete empolyee?",
       onOk: async () => {
         const res = await request("employee", "delete", item);
         if (res && !res.error) {
@@ -210,53 +265,74 @@ const ProductPage = () => {
       },
     });
   };
-  const exportToExcel = ()=>{
+  const exportToExcel = () => {
     // const dataExcel = [
     //   {id:1,name:"tert",age:20,city:"tbong khmung"},
     //   {id:1,name:"sokha",age:20,city:"tbong khmung"},
     // ]
-    const dataExcel = state.list.map((item)=>({
+    const dataExcel = state.list.map((item) => ({
       ...item,
-      date_of_birth : dayjs(item.date_of_birth).format("YYYY-MM-DD"),
-      start_date : dayjs(item.start_date).format("YYYY-MM-DD"),
-      created_at : dayjs(item.created_at).format("YYYY-MM-DD"),
-
+      date_of_birth: dayjs(item.date_of_birth).format("YYYY-MM-DD"),
+      start_date: dayjs(item.start_date).format("YYYY-MM-DD"),
+      created_at: dayjs(item.created_at).format("YYYY-MM-DD"),
     }));
-    
-  const ws = XLSX.utils.json_to_sheet(dataExcel);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Empolyee"); // ✅ correct order
 
-  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-  saveAs(new Blob([excelBuffer]), "Empolyee.xlsx");
-  }
- 
+    const ws = XLSX.utils.json_to_sheet(dataExcel);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Empolyee"); // ✅ correct order
+
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    saveAs(new Blob([excelBuffer]), "Empolyee.xlsx");
+  };
 
   const handleEdit = (items) => {
-    // 🖼️ តម្លៃរូបភាព (បើមាន)
     if (items.photo && items.photo !== "") {
-      const imageProduct = [
+      setimageDefault([
         {
           uid: "-1",
           name: items.photo,
           status: "done",
-          url: "http://localhost:81/full-stack/image/" + items.photo,
+          url: config.image_part + items.photo,
         },
-      ];
-      setimageDefault(imageProduct);
+      ]);
     } else {
       setimageDefault([]);
     }
+
     form.setFieldsValue({
       ...items,
       date_of_birth: dayjs(items.date_of_birth),
       start_date: dayjs(items.start_date),
-      status: items.status === 1 ? "active" : "inactive",
+      status: items.status === 1 ? 1 : 0,
     });
 
-    // 🪟 បើក Modal
     setState((pre) => ({ ...pre, visibleModal: true }));
   };
+
+  // const handleEdit = (items) => {
+  //   form.setFieldsValue({
+  //     ...items,
+  //     date_of_birth: dayjs(items.date_of_birth),
+  //     start_date: dayjs(items.start_date),
+  //     status: items.status === 1 ? 1 : 0,
+  //   });
+
+  //   // ✅ កំណត់រូបភាពទៅ state imageDefault
+  //   if (items.photo) {
+  //     setimageDefault([
+  //       {
+  //         uid: "-1",
+  //         name: items.photo,
+  //         status: "done",
+  //         url: config.image_part + items.photo,
+  //       },
+  //     ]);
+  //   } else {
+  //     setimageDefault([]);
+  //   }
+
+  //   setState((prev) => ({ ...prev, visibleModal: true }));
+  // };
 
   return (
     <MainPage loading={false}>
@@ -278,16 +354,33 @@ const ProductPage = () => {
           >
             Filter
           </Button>
-          <Button onClick={exportToExcel} className=" border-green-500 text-green-500">Export</Button>
+          <Button
+            onClick={exportToExcel}
+            className=" border-green-500 text-green-500"
+          >
+            Export
+          </Button>
         </Space>
-        <Button
-          icon={<MdAdd />}
-          className=" bg-green-300 text-white font-semibold "
-          onClick={handleAddbtn}
-        >
-          New
-        </Button>
+        {checkPermission("employee.create") && (
+          <Button
+            icon={<MdAdd />}
+            className=" bg-green-300 text-white font-semibold "
+            onClick={handleAddbtn}
+          >
+            New
+          </Button>
+        )}
       </div>
+
+      <Modal
+        open={showAttendanceModal}
+        onCancel={() => setShowAttendanceModal(false)}
+        footer={null}
+        width={600}
+        destroyOnClose
+      >
+        {selectedEmployee && <AttendanceEmployee employee={selectedEmployee} />}
+      </Modal>
       {/* <Button type='primary' icon={<MdAdd /> } onClick={handlAddbtn} className='mb-3'>New</Button> */}
       <Modal
         open={state.visibleModal}
@@ -370,15 +463,13 @@ const ProductPage = () => {
               </Form.Item>
             </Col>
 
-
-
             <Col span={12}>
               <Form.Item
                 name="date_of_birth"
-                label="Start Date"
+                label="Date of Birth"
                 rules={[{ required: true }]}
               >
-                <DatePicker style={{ width: "100%" }}/>
+                <DatePicker style={{ width: "100%" }} />
               </Form.Item>
               <Form.Item
                 name="email"
@@ -418,17 +509,11 @@ const ProductPage = () => {
               maxCount={1}
               onPreview={handlePreview}
               onChange={handleChangeDefault}
-              onRemove={(file) => {
-                console.log("Removing image:", file);
-                setimageDefault([]);
-                return true;
-              }}
-
               customRequest={(options) => {
                 options.onSuccess();
               }}
             >
-              {/* {uploadButton} */}
+              {/* {uploadButton}  */}
               {imageDefault.length >= 1 ? null : uploadButton}
             </Upload>
           </Form.Item>
@@ -469,7 +554,7 @@ const ProductPage = () => {
           {
             key: "photo",
             title: "Image",
-            listType:"picture-circle",
+            listType: "picture-circle",
             dataIndex: "photo",
             render: (value) =>
               value ? (
@@ -560,20 +645,33 @@ const ProductPage = () => {
                     <BsThreeDots />
                   </summary>
                   <ul className=" absolute top-0 right-[100%] w-[100px] px-3 py-2 bg-slate-100 z-10 border rounded-md">
+                    {checkPermission("employee.update") && (
+                      <li>
+                        <Button
+                          onClick={() => handleEdit(data)}
+                          className="text-sm text-green-500 bg-slate-100 border-none w-full"
+                        >
+                          Edit
+                        </Button>
+                      </li>
+                    )}
+                    {checkPermission("employee.remove") && (
+                      <li>
+                        <Button
+                          onClick={() => handleDelete(data)}
+                          className="text-sm text-red-600 border-none bg-slate-100 w-full"
+                        >
+                          Delete
+                        </Button>
+                      </li>
+                    )}
                     <li>
                       <Button
-                        onClick={() => handleEdit(data)}
-                        className="text-sm text-green-500 bg-slate-100 border-none w-full"
+                        type="link"
+                        className="text-sm text-blue-600 w-full p-0"
+                        onClick={() => handleOpenAttendance(data)}
                       >
-                        Edit
-                      </Button>
-                    </li>
-                    <li>
-                      <Button
-                        onClick={() => handleDelete(data)}
-                        className="text-sm text-red-600 border-none bg-slate-100 w-full"
-                      >
-                        Delete
+                        Attendance
                       </Button>
                     </li>
                     {/* <Button

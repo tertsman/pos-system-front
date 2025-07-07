@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 import {
   Button,
   Form,
@@ -33,8 +33,8 @@ const CategoryPage = () => {
   }, []); // ✅ Dependency added
 
   const getList = async () => {
-    const res_config = await request("config","get");
-    console.log(res_config)
+    const res_config = await request("config", "get");
+    console.log(res_config);
     setLoading(true);
     const res = await request("category");
     setLoading(false);
@@ -121,13 +121,15 @@ const CategoryPage = () => {
             onSearch={getList}
           />
         </Space>
-        <Button
-          icon={<MdAdd />}
-          className=" bg-green-300 text-white font-semibold "
-          onClick={handlAddbtn}
-        >
-          New
-        </Button>
+        {checkPermission("category.create") && (
+          <Button
+            icon={<MdAdd />}
+            className=" bg-green-300 text-white font-semibold "
+            onClick={handlAddbtn}
+          >
+            New
+          </Button>
+        )}
       </div>
       {/* <Button type='primary' icon={<MdAdd /> } onClick={handlAddbtn} className='mb-3'>New</Button> */}
       <Modal
@@ -202,16 +204,20 @@ const CategoryPage = () => {
             align: "center",
             render: (item, data, index) => (
               <Space>
-                <Button
-                  type="dashed"
-                  icon={<CiEdit />}
-                  onClick={() => handlEdit(data, index)}
-                />
-                <Button
-                  type="dashed"
-                  icon={<MdOutlineDelete />}
-                  onClick={() => handlDelete(data, index)}
-                />
+                {checkPermission("category.update") && (
+                  <Button
+                    type="dashed"
+                    icon={<CiEdit />}
+                    onClick={() => handlEdit(data, index)}
+                  />
+                )}
+                {checkPermission("category.remove") && (
+                  <Button
+                    type="dashed"
+                    icon={<MdOutlineDelete />}
+                    onClick={() => handlDelete(data, index)}
+                  />
+                )}
               </Space>
             ),
           },

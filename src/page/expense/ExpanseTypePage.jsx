@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MainPage from "../../component/layout/MainPage";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 import { Button, Form, Input, Modal, Space, Table, message } from "antd";
 
 const ExpanseTypePage = () => {
@@ -86,9 +86,11 @@ const ExpanseTypePage = () => {
             allowClear
           />
         </Space>
-        <Button onClick={handleOpenModal} className="bg-green-500 text-white">
-          New
-        </Button>
+        {checkPermission("expanse_type.create") && (
+          <Button onClick={handleOpenModal} className="bg-green-500 text-white">
+            New
+          </Button>
+        )}
       </div>
 
       <Table
@@ -107,12 +109,16 @@ const ExpanseTypePage = () => {
             title: "Action",
             render: (item) => (
               <Space>
-                <Button type="dashed" onClick={() => handleEdit(item)}>
-                  Edit
-                </Button>
-                <Button danger onClick={() => handleDelete(item)}>
-                  Delete
-                </Button>
+                {checkPermission("expanse_type.update") && (
+                  <Button type="dashed" onClick={() => handleEdit(item)}>
+                    Edit
+                  </Button>
+                )}
+                {checkPermission("expanse_type.remove") && (
+                  <Button danger onClick={() => handleDelete(item)}>
+                    Delete
+                  </Button>
+                )}
               </Space>
             ),
           },

@@ -5,11 +5,7 @@ const MainLayoutLogin = () => {
   return (
     <div>
     {/* header */}
-    <div className='bg-red-300 p-4'>
-        <h1>POS-TT</h1>
-        
-    </div>
-    <div>
+    <div className=' flex justify-center items-center '>
         <Outlet/>
     </div>
 

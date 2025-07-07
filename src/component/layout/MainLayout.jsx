@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Dropdown, Layout, Menu  } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 const { Content, Sider } = Layout;
 import { CiSearch } from "react-icons/ci";
 import { MdAttachEmail } from "react-icons/md";
@@ -8,6 +8,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import user from "../../assets/user/user.jpeg";
 import {
   getAccessToken,
+  getPermission,
   getProfile,
   setAccessToken,
   setProfile,
@@ -38,21 +39,21 @@ import { RiShieldKeyholeFill } from "react-icons/ri";
 import { GrLanguage } from "react-icons/gr";
 import { RiCurrencyLine } from "react-icons/ri";
 import logo from "../../assets/pos1.png"
-const items = [
+const item_menu = [
   {
-    key: "/",
+    key: "",
     label: "Dashbord",
     icon: <MdDashboard />,
     children: null,
   },
   {
-    key: "/pos",
+    key: "pos",
     label: "POS",
     icon: <MdOutlinePointOfSale />,
     children: null,
   },
   {
-    key: "/Customer",
+    key: "customer",
     label: "Customer",
     icon: <FaUsers />,
     children: null,
@@ -102,15 +103,16 @@ const items = [
         children: null,
       },
       {
-        key: "purchase_list",
-        label: "List Purchase",
-        icon: <MdViewList />,
+        key: "purchaseProduct",
+        label: "Purchase",
+        icon: <MdOutlineProductionQuantityLimits />,
+        
         children: null,
       },
       {
-        key: "purchase_product",
-        label: "Purchase Product",
-        icon: <MdOutlineProductionQuantityLimits />,
+        key: "purchaseList",
+        label: "PurchaseList",
+        icon: <MdViewList />,
         children: null,
       },
     ],
@@ -171,7 +173,7 @@ const items = [
         children: null,
       },
       {
-        key: "permission",
+        key: "role/permission",
         label: "Permission",
         icon: <RiShieldKeyholeFill />,
         children: null,
@@ -210,6 +212,8 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const profile = getProfile();
   const setConfig = configStore((state) => state.setConfig);
+const location = useLocation()
+  const permission = getPermission();
   const onclickMenu = (item) => {
     navigate(item.key);
   };
@@ -227,16 +231,22 @@ const MainLayout = () => {
   //   }
   // }, []);
 
+  const [items,setItems] = useState([])
   useLayoutEffect(() => {
   const accessToken = getAccessToken();
   const profile = getProfile();
-
   if (!accessToken || !profile) {
     navigate("/login");
   } else {
     getConfig();
   }
+  getMenuByUser();
+  
 }, []);
+
+useEffect(()=>{
+checkPermissionPage();
+})
 
   // Run whenever profile changes
 const getConfig= async ()=>{
@@ -245,6 +255,33 @@ const getConfig= async ()=>{
        if(res){
         setConfig(res)
        }
+}
+
+const checkPermissionPage = ()=>{
+  let findIndex = permission?.findIndex(
+    (item)=>item.web_route_key === location.pathname
+  )
+  if(findIndex == -1 ){
+    for ( let i = 0; i< permission.length; i++){
+      if(permission[i].web_route_key != ""){
+        navigate(permission[i].web_route_key)
+        break;
+      }
+    }
+  }
+}
+
+const getMenuByUser = ()=>{
+   let new_item = [];
+   item_menu?.map((item1) => {
+    const p1 = permission.findIndex((data1)=> data1.web_route_key == "/" + item1.key)
+    if(p1 != -1){
+      new_item.push(item1)
+    }
+   })
+   setItems(new_item);
+  //  setItems(item_menu);
+
 }
   const handleLogout = () => {
     setProfile(null);
@@ -323,7 +360,7 @@ outline-none"
            
             <div>
               <h3 className="text-s capitalize font-bold">{profile?.name}</h3>
-              <p>{profile?.Role_Name}</p>
+              <p>{profile?.role_names}</p>
             </div>
             <div className="w-[60px]  h-[60px] rounded-full overflow-hidden ml-2  ">
               <Dropdown

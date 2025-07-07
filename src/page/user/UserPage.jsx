@@ -36,16 +36,16 @@ const UserPage = () => {
   };
 
   const onFinish = async (item) => {
-    if(item.password !== item.confirm_password){
-      message.warning("Password and confirm Password Not Match!")
+    if (item.password !== item.confirm_password) {
+      message.warning("Password and confirm Password Not Match!");
       return;
     }
     var data = {
       ...item,
-      id:form.getFieldValue("id")
+      id: form.getFieldValue("id"),
     };
     var method = "post";
-    if(form.getFieldValue("id")){
+    if (form.getFieldValue("id")) {
       method = "put";
     }
     const res = await request("auth", method, data);
@@ -60,32 +60,31 @@ const UserPage = () => {
 
   const handleEdit = (item) => {
     form.setFieldsValue({
-
       ...item,
       // id:item.id,
       // name:item.name,
       // code:item.code,
-    })
+    });
     handleOpenModal();
   };
   const handleDelete = (item) => {
     Modal.confirm({
-      title:"Delete",
-      content:"Are you sure remove data",
-      onOk:async () =>{
-        const res = await request("auth","delete",{
-          id: item.id
+      title: "Delete",
+      content: "Are you sure remove data",
+      onOk: async () => {
+        const res = await request("auth", "delete", {
+          id: item.id,
         });
-        if(res && !res.error){
+        if (res && !res.error) {
           const newList = state.list.filter((item1) => item1.id != item.id);
-          setState((pre)=>({
+          setState((pre) => ({
             ...pre,
-            list:newList
-          }))
+            list: newList,
+          }));
           message.success(res.message);
         }
-      }
-    })
+      },
+    });
   };
 
   const handleCloseModal = () => {
@@ -118,8 +117,8 @@ const UserPage = () => {
           </Button>
         </div>
       </div>
-      <Modal 
-        title={form.getFieldValue('id')? "Update User":"New User" }
+      <Modal
+        title={form.getFieldValue("id") ? "Update User" : "New User"}
         open={state.visible}
         onCancel={handleCloseModal}
         footer={null}
@@ -173,7 +172,7 @@ const UserPage = () => {
           >
             <Input.Password placeholder="Password" />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="role_id"
             label="Role"
             rules={[
@@ -183,7 +182,24 @@ const UserPage = () => {
               },
             ]}
           >
-            <Select placeholder="Select status" options={state.role} />
+            <Select placeholder="Select role" options={state.role} />
+          </Form.Item> */}
+
+          <Form.Item
+            name="role_ids"
+            label="Roles"
+            rules={[
+              {
+                required: true,
+                message: "Please Select Role(s)",
+              },
+            ]}
+          >
+            <Select
+              mode="multiple"
+              options={state.role}
+              placeholder="Select roles"
+            />
           </Form.Item>
 
           <Form.Item
@@ -213,7 +229,7 @@ const UserPage = () => {
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit">
-              {form.getFieldValue("id") ? "Update":"Save"}
+                {form.getFieldValue("id") ? "Update" : "Save"}
               </Button>
               <Button onClick={handleCloseModal}>Cancel</Button>
             </Space>
@@ -240,11 +256,18 @@ const UserPage = () => {
             dataIndex: "username",
           },
 
+          // {
+          //   key: "role",
+          //   title: "Role",
+          //   align: "center",
+          //   dataIndex: "role_name",
+          // },
           {
-            key: "role",
-            title: "Role",
-            align: "center",
-            dataIndex: "role_name",
+            title: "Roles",
+            dataIndex: "role_names",
+            render: (text) => (
+              <div className="text-green-600">{text || "No roles"}</div>
+            ),
           },
 
           {

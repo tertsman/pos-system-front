@@ -1,7 +1,7 @@
 // 📁 pages/payroll/index.jsx
 import { useEffect, useState } from "react";
 import MainPage from "../../component/layout/MainPage";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 import {
   Button,
   Form,
@@ -83,28 +83,7 @@ const PayrollPage = () => {
     form.resetFields();
   };
 
-  // const onFinish = async (item) => {
-  //   const data = { ...item, id: form.getFieldValue("id") };
-
-  //   if (data.payment_date)
-  //     data.payment_date = dayjs(data.payment_date).format("YYYY-MM-DD");
-
-  //   data.net_salary =
-  //     parseFloat(data.base_salary || 0) +
-  //     parseFloat(data.bonus || 0) -
-  //     parseFloat(data.deduction || 0);
-
-  //   const method = form.getFieldValue("id") ? "put" : "post";
-
-  //   const res = await request("payroll", method, data);
-  //   if (res && !res.error) {
-  //     message.success(res.message);
-  //     getList();
-  //     handleCloseModal();
-  //   } else {
-  //     message.warning(res.message);
-  //   }
-  // };
+  
   const onFinish = async (item) => {
     const data = { ...item, id: form.getFieldValue("id") };
 
@@ -171,12 +150,14 @@ const PayrollPage = () => {
             onSearch={getList}
           />
         </Space>
+        {checkPermission("payroll.create") &&
         <Button
           className="bg-green-300 text-white font-semibold"
           onClick={handleOpenModal}
         >
           New
         </Button>
+}
       </div>
 
       <Modal
@@ -283,6 +264,7 @@ const PayrollPage = () => {
             title: "Action",
             render: (item) => (
               <Space>
+                {checkPermission("payroll.update") &&
                 <Button
                   onClick={() => handleEdit(item)}
                   type="dashed"
@@ -290,6 +272,8 @@ const PayrollPage = () => {
                 >
                   Edit
                 </Button>
+          }
+          {checkPermission("payroll.remove") &&
                 <Button
                   onClick={() => handleDelete(item)}
                   type="dashed"
@@ -297,6 +281,7 @@ const PayrollPage = () => {
                 >
                   Del
                 </Button>
+          }
               </Space>
             ),
           },

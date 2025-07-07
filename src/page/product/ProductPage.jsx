@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 import {
   Button,
   Col,
@@ -29,6 +29,10 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
+import { IoBagHandle } from "react-icons/io5";
+import { TbCategoryFilled } from "react-icons/tb";
+import { TbBrandBinance } from "react-icons/tb";
 const ProductPage = () => {
   const [form] = Form.useForm();
   const { config } = configStore();
@@ -38,7 +42,7 @@ const ProductPage = () => {
     pagination: {
       total: 0,
       page: 1,
-      limit: 5,
+      limit: 10,
     },
   });
 
@@ -93,7 +97,7 @@ const ProductPage = () => {
     </button>
   );
 
-  const getList = async (page = 1, limit = 5) => {
+  const getList = async (page = 1, limit = 10) => {
     var params = {
       page,
       limit,
@@ -113,134 +117,6 @@ const ProductPage = () => {
       }));
     }
   };
-
-  // id	category_id	barcode	name	brands	description	qty	price	discount	status	image	create_by	create_at
-  // const onFinish = async (items) => {
-  //   try {
-  //     var params = new FormData();
-
-  //     // var ImageOption = [];
-  //     // if (ImageOptional_old.length > 0) {
-  //     //   ImageOptional_old.map((item1, index1) => {
-  //     //     var isFound = false;
-  //     //     if (items.image_optional) {
-  //     //       // multiple iamge
-  //     //       items.image_optional.fileList?.map((item2, index2) => {
-  //     //         if (item1.name === item2.name) {
-  //     //           isFound = true;
-  //     //         }
-  //     //       });
-  //     //     }
-  //     //     // if (isFound == false && item1.name !== "default.jpg") {
-  //     //     //   ImageOption.push(item1.name);
-  //     //     // }
-  //     //     if (isFound == false) {
-  //     //       ImageOption.push(item1.name);
-  //     //     }
-  //     //     console.log("imagefalse", ImageOption);
-  //     //   });
-  //     // }
-  //     const ImageOption = [];
-
-  //     ImageOptional_old.forEach((oldImg) => {
-  //       const stillExists = items.image_optional?.fileList?.some(
-  //         (file) => file.name === oldImg.name
-  //       );
-
-  //       if (!stillExists) {
-  //         ImageOption.push(oldImg.name); // Only push images that really need to be deleted
-  //       }
-  //     });
-
-  //     params.append("name", items.name);
-  //     params.append("category_id", items.category_id);
-  //     params.append("barcode", items.barcode);
-  //     params.append("brands", items.brands);
-  //     params.append("description", items.description);
-  //     params.append("qty", items.qty);
-  //     params.append("price", items.price);
-  //     params.append("discount", items.discount);
-  //     params.append("status", items.status);
-  //     // params.append("image", form.getFieldValue("image"));
-
-  //     // if (ImageOption && ImageOption.length > 0) {
-  //     //   ImageOption.map((item) => {
-  //     //     params.append("image_optional", item);
-  //     //   });
-  //     // }
-  //     params.append("image_optional", JSON.stringify(ImageOption));
-
-  //     params.append("id", form.getFieldValue("id"));
-
-  //     // if (items.image_default) {
-  //     //   const file = items.image_default.file;
-  //     //   if (file.status === "removed") {
-  //     //     params.append("image_remove", "1");
-  //     //     params.append("image", ""); // បញ្ជូនសម្រាប់លុបរូបភាពចាស់
-  //     //   } else {
-  //     //     params.append("upload_image", file.originFileObj, file.name); // បញ្ជូនរូបភាពថ្មី
-  //     //   }
-  //     // } else {
-  //     //   params.append("image", "");
-  //     // }
-
-  //     const defaultImage = form.getFieldValue("image"); // current stored image
-
-  //     if (items.image_default?.file) {
-  //       const file = items.image_default.file;
-
-  //       // ប្រសិនបើរូបត្រូវបានលុប
-  //       if (file.status === "removed") {
-  //         params.append("image_remove", "1");
-  //         params.append("image", ""); // ដាក់ជា null
-  //       }
-  //       // ប្រសិនបើជារូប upload ថ្មី
-  //       else if (file.originFileObj) {
-  //         params.append("upload_image", file.originFileObj, file.name);
-  //         params.append("image", ""); // លុបរូបចាស់
-  //       }
-  //       // ប្រសិនបើគ្មានអ្វីផ្លាស់ប្តូរ
-  //       else {
-  //         params.append("image", file.name || defaultImage);
-  //       }
-  //     } else {
-  //       params.append("image", defaultImage || "");
-  //     }
-
-  //     // if (items.image_optional) {
-  //     //   console.log(items.image_optional);
-  //     //   items.image_optional.fileList?.map((item, index) => {
-  //     //     if (item?.originFileObj) {
-  //     //       params.append(
-  //     //         "upload_image_optional",
-  //     //         item.originFileObj,
-  //     //         item.name
-  //     //       );
-  //     //     }
-  //     //   });
-  //     // }
-  //     items.image_optional?.fileList?.forEach((item) => {
-  //       if (item.originFileObj) {
-  //         params.append("upload_image_optional", item.originFileObj, item.name);
-  //       }
-  //     });
-
-  //     var method = "post";
-  //     if (form.getFieldValue("id")) {
-  //       method = "put";
-  //     }
-  //     const res = await request("product", method, params);
-  //     console.log(res);
-  //     if (res && !res.error) {
-  //       message.success(res.message);
-  //       getList();
-  //       handleCloseModal();
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     message.error("Error during the update process. Please try again.");
-  //   }
-  // };
 
   const onFinish = async (items) => {
     try {
@@ -268,7 +144,7 @@ const ProductPage = () => {
       params.append("discount", items.discount);
       params.append("status", items.status);
       params.append("id", form.getFieldValue("id"));
-      console.log(items.discount)
+      console.log(items.discount);
       // ✅ បញ្ជូនរូបភាពដែលត្រូវលុបជារូប optional
       params.append("image_optional", JSON.stringify(ImageOption));
 
@@ -553,37 +429,21 @@ const ProductPage = () => {
     getList(1, state.pagination.limit);
   };
 
-  // const onSearch = () => {
-  //   getList();
-  // };
-
-  // const handleDelete = (item, data) => {
-  //   Modal.confirm({
-  //     title: "Remove data",
-  //     content: "Are you sure to delete product?",
-  //     onOk: async () => {
-  //       const res = await request("product", "delete", item);
-  //       if (res && !res.error) {
-  //         message.success(res.message);
-  //         getList();
-  //       }
-  //     },
-  //   });
-  // };
-
   const handleDelete = (item) => {
     Modal.confirm({
-      title: "Remove data",
-      content: "Are you sure to delete product?",
+      title: "Delete Product",
+      content: `Are you sure you want to delete "${item.name}"?`,
+      okText: "Yes",
+      cancelText: "Cancel",
       onOk: async () => {
         const res = await request("product", "delete", {
           id: item.id,
           image: item.image || null,
-          image_optional: JSON.stringify(item.image_optional || []), // បញ្ជូន optional images
+          image_optional: JSON.stringify(item.image_optional || []),
         });
         if (res && !res.error) {
           message.success(res.message);
-          getList();
+          getList(); // Refresh product list
         } else {
           message.error(res.message || "Delete failed");
         }
@@ -649,340 +509,395 @@ const ProductPage = () => {
   };
   return (
     <MainPage loading={false}>
-      <div className="flex justify-between items-center px-2 py-2 ">
-        <Space>
-          <h1 className="text-2xl font-bold">PRODUCT</h1>
-          <Input.Search
-            placeholder="Search supplier"
-            // onChange={(event) =>
-            //   setFilter((p) => ({ ...p, txt_search: event.target.value }))
-            // }
-            // allowClear
-            // onSearch={onSearch}
-            value={filter.txt_search}
-            onChange={(e) =>
-              setFilter((p) => ({ ...p, txt_search: e.target.value }))
-            }
-            onSearch={() => getList(1, state.pagination.limit)} 
-          />
-          <Select
-            allowClear
-            placeholder="Select Category"
-            style={{ width: 120 }}
-            options={config.category?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-            onChange={(id) => {
-              setFilter((pre) => ({ ...pre, category_id: id }));
-            }}
-          />
-          <Select
-            allowClear
-            placeholder="Select brand"
-            style={{ width: 120 }}
-            options={config.brand?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-            onChange={(value) => {
-              setFilter((pre) => ({ ...pre, brand: value }));
-            }}
-          />
-          <Button
-            onClick={onFilter}
-            // icon={<MdAdd />}
-            className=" bg-green-300 text-white font-semibold "
-          >
-            Filter
-          </Button>
-        </Space>
-        <Button
-          icon={<MdAdd />}
-          className=" bg-green-300 text-white font-semibold "
-          onClick={handleAddbtn}
-        >
-          New
-        </Button>
-      </div>
-      {/* <Button type='primary' icon={<MdAdd /> } onClick={handlAddbtn} className='mb-3'>New</Button> */}
-      <Modal
-        open={state.visibleModal}
-        title={form.getFieldValue("id") ? "Update Product" : "New Product"}
-        footer={null}
-        onCancel={handleCloseModal}
-        width={700}
-      >
-        <Form layout="vertical" onFinish={onFinish} form={form}>
-          <Row gutter={8}>
-            <Col span={12}>
-              <Form.Item
-                name={"name"}
-                label={"Product Name"}
-                rules={[
-                  {
-                    required: true,
-                    message: "please fill in name",
-                  },
-                ]}
-              >
-                <Input placeholder="input product name" />
-              </Form.Item>
-              <Form.Item
-                name={"brands"}
-                label={"Brands"}
-                rules={[
-                  {
-                    required: true,
-                    message: "please select brands",
-                  },
-                ]}
-              >
-                <Select
-                  allowClear
-                  placeholder="ជ្រើសរើសប្រេន"
-                  options={brandOptions}
-                />
-              </Form.Item>
-              <Form.Item name={"price"} label={"Price"}>
-                <InputNumber placeholder="input Price " className="w-full" />
-              </Form.Item>
-              <Form.Item name={"status"} label={"Status"}>
-                <Select
-                  placeholder="Select status"
-                  options={[
-                    {
-                      label: "Active",
-                      value: 1,
-                    },
-                    {
-                      label: "InActive",
-                      value: 0,
-                    },
-                  ]}
-                />
-              </Form.Item>
-            </Col>
+      <div className="container">
+        <div className="productReport grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2 mb-3">
+          <div className="totalProduct card shadow-md border-sky-100 border p-7 rounded-md relative">
+            <div className="totalProductHead">
+              <h1 className=" text-xl text-sky-400 capitalize font-bold ">total product</h1>
 
-            <Col span={12}>
-              <Form.Item
-                name="category_id"
-                label="Category"
-                rules={[{ required: true }]}
-              >
-                <Select
-                  options={categoryOptions}
-                  placeholder="ជ្រើសរើសប្រភេទផលិតផល"
-                />
-              </Form.Item>
-              <Form.Item name={"qty"} label={"Quantity"}>
-                <InputNumber placeholder="input Quantity " className="w-full" />
-              </Form.Item>
-              <Form.Item name={"discount"} label={"Discount"}>
-                <InputNumber placeholder="input Quantity " className="w-full" />
-              </Form.Item>
-              <Form.Item name={"barcode"} label={"Barcode"}>
-                <Input disabled placeholder="Barcode " className="w-full" />
-              </Form.Item>
-            </Col>
-          </Row>
+              <IoBagHandle className=" text-6xl absolute top-5 right-3 text-sky-300 " />
+            </div>
+            
 
-          <Form.Item name={"description"} label={"Description"}>
-            <Input.TextArea placeholder="Description" />
-          </Form.Item>
-
-          <Form.Item name={"image_default"} label={"Picture"}>
-            <Upload
-              listType="picture-card"
-              fileList={imageDefault}
-              maxCount={1}
-              beforeUpload={beforeUpload}
-              onPreview={handlePreview}
-              onChange={handleChangeDefault}
-              onRemove={(file) => {
-                console.log("Removing image:", file);
-                setimageDefault([]);
-                return true;
-              }}
-              multiple={true}
-              customRequest={(options) => {
-                options.onSuccess();
-              }}
-            >
-              {/* {uploadButton} */}
-              {imageDefault.length >= 1 ? null : uploadButton}
-            </Upload>
-          </Form.Item>
-
-          <Form.Item name={"image_optional"} label={"(Optional)"}>
-            <Upload
-              listType="picture-card"
-              fileList={imageOptional}
-              onPreview={handlePreview}
-              beforeUpload={beforeUpload}
-              onChange={handleChangeOptional}
-              onRemove={(file) => {
-                const updatedList = imageOptional.filter(
-                  (item) => item.uid !== file.uid
-                );
-                setimageOptional(updatedList);
-                return true;
-              }}
-              multiple={true}
-              customRequest={(options) => {
-                options.onSuccess();
-              }}
-            >
-              {imageOptional.length >= 5 ? null : uploadButton}
-            </Upload>
-          </Form.Item>
-          {previewImage && (
-            <Image
-              wrapperStyle={{
-                display: "none",
-              }}
-              preview={{
-                visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(""),
-              }}
-              src={previewImage}
+            <div className="text-3xl font-bold text-sky-600 text-left mt-2  w-full">
+            {state.list.length}
+            </div>
+            
+          </div>
+          <div className="totalProduct card shadow-md border-sky-100 p-7 relative border rounded-md ">
+            <div className="totalProductHead">
+              <h1 className=" text-xl text-sky-400 capitalize font-bold ">
+                total category
+              </h1>
+              <TbCategoryFilled className=" text-6xl absolute top-5 right-3 text-sky-300 "/>
+            </div>
+             <div className="text-3xl font-bold text-sky-600 text-left mt-2  w-full"> {config.category.length}</div>
+          </div>
+          <div className="totalProduct card shadow-md border-sky-100 p-7 relative">
+            <div className="totalProductHead">
+            <h1 className=" text-xl text-sky-400 capitalize font-bold ">
+              total brands
+            </h1>
+            <TbBrandBinance className=" text-6xl absolute top-5 right-3 text-sky-300 "/>
+            </div>
+            <div className=" text-3xl font-bold text-sky-600 text-left mt-2  w-full">
+              {" "}
+              {config.brand.length}{" "}
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between items-center px-2 py-2 ">
+          <Space>
+            <h1 className="text-2xl font-bold">PRODUCT</h1>
+            <Input.Search
+              placeholder="Search supplier"
+              // onChange={(event) =>
+              //   setFilter((p) => ({ ...p, txt_search: event.target.value }))
+              // }
+              // allowClear
+              // onSearch={onSearch}
+              value={filter.txt_search}
+              onChange={(e) =>
+                setFilter((p) => ({ ...p, txt_search: e.target.value }))
+              }
+              onSearch={() => getList(1, state.pagination.limit)}
             />
-          )}
-          <Space className="mt-3 w-full  justify-end">
-            <Button onClick={handleCloseModal}>Cancel</Button>
-            <Button type="primary" htmlType="submit">
-              {form.getFieldValue("id") ? "Update" : "Save"}
+            <Select
+              allowClear
+              placeholder="Select Category"
+              style={{ width: 120 }}
+              options={config.category?.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              onChange={(id) => {
+                setFilter((pre) => ({ ...pre, category_id: id }));
+              }}
+            />
+            <Select
+              allowClear
+              placeholder="Select brand"
+              style={{ width: 120 }}
+              options={config.brand?.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              onChange={(value) => {
+                setFilter((pre) => ({ ...pre, brand: value }));
+              }}
+            />
+            <Button
+              onClick={onFilter}
+              // icon={<MdAdd />}
+              className=" bg-green-300 text-white font-semibold "
+            >
+              Filter
             </Button>
           </Space>
-        </Form>
-      </Modal>
-      <Table
-        dataSource={
-          state.list && state.list.length > 0
-            ? state.list.map((item) => ({ ...item, key: item.id }))
-            : []
-        }
-        columns={[
-          {
-            key: "no",
-            title: "NO",
-            render: (item, date, index) => index + 1,
-          },
-          {
-            key: "image",
-            title: "Image",
-            dataIndex: "image",
+          {checkPermission("product.create") && (
+            <Button
+              icon={<MdAdd />}
+              className=" bg-green-300 text-white font-semibold "
+              onClick={handleAddbtn}
+            >
+              New
+            </Button>
+          )}
+        </div>
+        {/* <Button type='primary' icon={<MdAdd /> } onClick={handlAddbtn} className='mb-3'>New</Button> */}
+        <Modal
+          open={state.visibleModal}
+          title={form.getFieldValue("id") ? "Update Product" : "New Product"}
+          footer={null}
+          onCancel={handleCloseModal}
+          width={700}
+        >
+          <Form layout="vertical" onFinish={onFinish} form={form}>
+            <Row gutter={8}>
+              <Col span={12}>
+                <Form.Item
+                  name={"name"}
+                  label={"Product Name"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "please fill in name",
+                    },
+                  ]}
+                >
+                  <Input placeholder="input product name" />
+                </Form.Item>
+                <Form.Item
+                  name={"brands"}
+                  label={"Brands"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "please select brands",
+                    },
+                  ]}
+                >
+                  <Select
+                    allowClear
+                    placeholder="ជ្រើសរើសប្រេន"
+                    options={brandOptions}
+                  />
+                </Form.Item>
+                <Form.Item name={"price"} label={"Price"}>
+                  <InputNumber placeholder="input Price " className="w-full" />
+                </Form.Item>
+                <Form.Item name={"status"} label={"Status"}>
+                  <Select
+                    placeholder="Select status"
+                    options={[
+                      {
+                        label: "Active",
+                        value: 1,
+                      },
+                      {
+                        label: "InActive",
+                        value: 0,
+                      },
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
 
-            render: (value) =>
-              value ? (
-                <Image
-                  src={"http://localhost:81/full-stack/image/" + value}
-                  style={{ width: 50, height:50,objectFit:"cover",borderRadius:10, }}
-                />
-              ) : (
-                <div
-                  style={{ backgroundColor: "#eee", width: 50, height: 50 }}
-                />
+              <Col span={12}>
+                <Form.Item
+                  name="category_id"
+                  label="Category"
+                  rules={[{ required: true }]}
+                >
+                  <Select
+                    options={categoryOptions}
+                    placeholder="ជ្រើសរើសប្រភេទផលិតផល"
+                  />
+                </Form.Item>
+                <Form.Item name={"qty"} label={"Quantity"}>
+                  <InputNumber
+                    placeholder="input Quantity "
+                    className="w-full"
+                  />
+                </Form.Item>
+                <Form.Item name={"discount"} label={"Discount"}>
+                  <InputNumber
+                    placeholder="input Quantity "
+                    className="w-full"
+                  />
+                </Form.Item>
+                <Form.Item name={"barcode"} label={"Barcode"}>
+                  <Input disabled placeholder="Barcode " className="w-full" />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Form.Item name={"description"} label={"Description"}>
+              <Input.TextArea placeholder="Description" />
+            </Form.Item>
+
+            <Form.Item name={"image_default"} label={"Picture"}>
+              <Upload
+                listType="picture-card"
+                fileList={imageDefault}
+                maxCount={1}
+                beforeUpload={beforeUpload}
+                onPreview={handlePreview}
+                onChange={handleChangeDefault}
+                onRemove={(file) => {
+                  console.log("Removing image:", file);
+                  setimageDefault([]);
+                  return true;
+                }}
+                multiple={true}
+                customRequest={(options) => {
+                  options.onSuccess();
+                }}
+              >
+                {/* {uploadButton} */}
+                {imageDefault.length >= 1 ? null : uploadButton}
+              </Upload>
+            </Form.Item>
+
+            <Form.Item name={"image_optional"} label={"(Optional)"}>
+              <Upload
+                listType="picture-card"
+                fileList={imageOptional}
+                onPreview={handlePreview}
+                beforeUpload={beforeUpload}
+                onChange={handleChangeOptional}
+                onRemove={(file) => {
+                  const updatedList = imageOptional.filter(
+                    (item) => item.uid !== file.uid
+                  );
+                  setimageOptional(updatedList);
+                  return true;
+                }}
+                multiple={true}
+                customRequest={(options) => {
+                  options.onSuccess();
+                }}
+              >
+                {imageOptional.length >= 5 ? null : uploadButton}
+              </Upload>
+            </Form.Item>
+            {previewImage && (
+              <Image
+                wrapperStyle={{
+                  display: "none",
+                }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(""),
+                }}
+                src={previewImage}
+              />
+            )}
+            <Space className="mt-3 w-full  justify-end">
+              <Button onClick={handleCloseModal}>Cancel</Button>
+              <Button type="primary" htmlType="submit">
+                {form.getFieldValue("id") ? "Update" : "Save"}
+              </Button>
+            </Space>
+          </Form>
+        </Modal>
+        <Table
+          dataSource={
+            state.list && state.list.length > 0
+              ? state.list.map((item) => ({ ...item, key: item.id }))
+              : []
+          }
+          columns={[
+            {
+              key: "no",
+              title: "NO",
+              render: (item, date, index) => index + 1,
+            },
+            {
+              key: "image",
+              title: "Image",
+              dataIndex: "image",
+
+              render: (value) =>
+                value ? (
+                  <Image
+                    src={"http://localhost:81/full-stack/image/" + value}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      objectFit: "cover",
+                      borderRadius: 10,
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{ backgroundColor: "#eee", width: 50, height: 50 }}
+                  />
+                ),
+            },
+            {
+              key: "name",
+              title: "name",
+              dataIndex: "name",
+            },
+            {
+              key: "barcode",
+              title: "Barcode",
+              dataIndex: "barcode",
+            },
+            {
+              key: "category_name",
+              title: "Category",
+              dataIndex: "category_name",
+            },
+            {
+              key: "brand_name",
+              title: "Brand",
+              dataIndex: "brand_name",
+            },
+            {
+              key: "qty",
+              title: "Quantity",
+              dataIndex: "qty",
+            },
+            {
+              key: "price",
+              title: "Price",
+              dataIndex: "price",
+            },
+            {
+              key: "discount",
+              title: "Discount",
+              dataIndex: "discount",
+            },
+
+            {
+              key: "status",
+              title: "Status",
+              dataIndex: "status",
+              align: "right",
+              render: (item) =>
+                item == 1 ? (
+                  <Tag color="green">Active</Tag>
+                ) : (
+                  <Tag color="red">InActive</Tag>
+                ),
+            },
+            {
+              key: "create_at",
+              title: "Create At",
+              dataIndex: "create_at",
+              render: (value) => dayjs(value).format("DD-MMM-YY"),
+            },
+            {
+              key: "action",
+              title: "Action",
+              align: "center",
+
+              render: (item, data) => (
+                <Space>
+                  <details className="relative">
+                    <summary className="list-none cursor-pointer">
+                      <BsThreeDots />
+                    </summary>
+                    <ul className=" absolute top-0 right-[100%] w-[100px]  bg-slate-100 z-10 border rounded-md">
+                      {checkPermission("product.update") && (
+                        <li>
+                          <Button
+                            onClick={() => handleEdit(data)}
+                            className="text-sm text-green-500 bg-slate-100 border-none w-full"
+                          >
+                            Edit
+                          </Button>
+                        </li>
+                      )}
+                      {checkPermission("product.remove") && (
+                        <li>
+                          <Button
+                            onClick={() => handleDelete(data)}
+                            className="text-sm text-red-600 border-none bg-slate-100 w-full"
+                          >
+                            Delete
+                          </Button>
+                        </li>
+                      )}
+                    </ul>
+                  </details>
+                </Space>
               ),
-          },
-          {
-            key: "name",
-            title: "name",
-            dataIndex: "name",
-          },
-          {
-            key: "barcode",
-            title: "Barcode",
-            dataIndex: "barcode",
-          },
-          {
-            key: "category_name",
-            title: "Category",
-            dataIndex: "category_name",
-          },
-          {
-            key: "brand_name",
-            title: "Brand",
-            dataIndex: "brand_name",
-          },
-          {
-            key: "qty",
-            title: "Quantity",
-            dataIndex: "qty",
-          },
-          {
-            key: "price",
-            title: "Price",
-            dataIndex: "price",
-          },
-          {
-            key: "discount",
-            title: "Discount",
-            dataIndex: "discount",
-          },
-
-          {
-            key: "status",
-            title: "Status",
-            dataIndex: "status",
-            align: "right",
-            render: (item) =>
-              item == 1 ? (
-                <Tag color="green">Active</Tag>
-              ) : (
-                <Tag color="red">InActive</Tag>
-              ),
-          },
-          {
-            key: "create_at",
-            title: "Create At",
-            dataIndex: "create_at",
-            render: (value) => dayjs(value).format("DD-MMM-YY"),
-          },
-          {
-            key: "action",
-            title: "Action",
-            align: "center",
-
-            render: (item, data) => (
-              <Space>
-                <details className="relative">
-                  <summary className="list-none cursor-pointer">
-                    <BsThreeDots />
-                  </summary>
-                  <ul className=" absolute top-0 right-[100%] w-[100px]  bg-slate-100 z-10 border rounded-md">
-                    <li>
-                      <Button
-                        onClick={() => handleEdit(data)}
-                        className="text-sm text-green-500 bg-slate-100 border-none w-full"
-                      >
-                        Edit
-                      </Button>
-                    </li>
-                    <li>
-                      <Button
-                        onClick={() => handleDelete(data)}
-                        className="text-sm text-red-600 border-none bg-slate-100 w-full"
-                      >
-                        Delete
-                      </Button>
-                    </li>
-                  </ul>
-                </details>
-              </Space>
-            ),
-          },
-        ]}
-        pagination={{
-          current: state.pagination.page,
-          pageSize: state.pagination.limit,
-          total: state.pagination.total,
-          onChange: (page, pageSize) => {
-            getList(page, pageSize);
-          },
-        }}
-      />
+            },
+          ]}
+          pagination={{
+            current: state.pagination.page,
+            pageSize: state.pagination.limit,
+            total: state.pagination.total,
+            onChange: (page, pageSize) => {
+              getList(page, pageSize);
+            },
+          }}
+        />
+      </div>
     </MainPage>
   );
 };

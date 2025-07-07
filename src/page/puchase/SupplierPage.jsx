@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MainPage from "../../component/layout/MainPage";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 import { Button, Form, Input, message, Modal, Space, Table } from "antd";
 import { BsThreeDots } from "react-icons/bs";
 import dayjs from "dayjs";
@@ -91,16 +91,11 @@ const SupplierPage = () => {
   const handleEdit = (item) => {
     form.setFieldsValue({
       ...item,
-      // id:item.id,
-      // name:item.name,
-      // code:item.code,
+      
     });
     handleOpenModal();
   };
-  // const onFieldClear =(value)=>{
-  //   setState((p) => ({ ...p, txtSearch: value.target.value }));
-  //   getList();
-  // }
+
 
 
   const onSearch = ()=>{
@@ -120,12 +115,13 @@ const SupplierPage = () => {
             onSearch={onSearch}
           />
         </Space>
+        {checkPermission("supplier.create") &&
         <Button
           className=" bg-green-300 text-white font-semibold "
           onClick={handleOpenModal}
         >
           New
-        </Button>
+        </Button>}
       </div>
       <Modal
         title={form.getFieldValue("id") ? "Update Supplier" : "New Supplier"}
@@ -201,12 +197,7 @@ const SupplierPage = () => {
           ? state.list.map((item) => ({ ...item, key: item.id }))
           : []
       }
-        // dataSource={
-        //   state.data
-        //     ? state.list.map((item) => ({ ...item, key: item.id }))
-        //     : []
-        // }
-        // dataSource={state.list.map((item) => ({ ...item, key: item.id }))}
+        
         columns={[
           {
             key: "no",
@@ -271,14 +262,17 @@ const SupplierPage = () => {
                     <BsThreeDots />
                   </summary>
                   <ul className=" absolute top-0 right-[100%] w-[150px] px-3 py-2 bg-slate-100 z-10 border rounded-md">
+                    {checkPermission("supplier.update") &&
                     <li>
+
                       <Button
                         onClick={() => handleEdit(data)}
                         className="text-sm text-green-500 bg-slate-100 border-none w-full"
                       >
                         Edit
                       </Button>
-                    </li>
+                    </li>}
+                    {checkPermission("supplier.remove") &&
                     <li>
                       <Button
                         onClick={() => handleDelete(data)}
@@ -286,21 +280,7 @@ const SupplierPage = () => {
                       >
                         Delete
                       </Button>
-                    </li>
-                    {/* <Button
-                  onClick={() => handleEdit(data)}
-                  type="dashed"
-                  className="text-sm text-green-500 bg-green-200 border-green-200"
-                >
-                  Edit
-                </Button>
-                <Button
-                  onClick={() => handleDelete(data)}
-                  type="dashed"
-                  className="text-sm text-red-600 border-red-200"
-                >
-                  Del
-                </Button> */}
+                    </li>}
                   </ul>
                 </details>
               </Space>

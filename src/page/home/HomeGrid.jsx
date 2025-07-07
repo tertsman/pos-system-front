@@ -17,11 +17,16 @@ const HomeGrid = ({ data = [] }) => {
       return <MdCurrencyExchange className="text-6xl text-green-500 absolute top-[-20px] right-1 drop-shadow-md" />;
     default:
       return null;
+
+      case "Net Profit":
+  return (
+    <MdCurrencyExchange className="text-6xl text-yellow-500 absolute top-[-20px] right-1 drop-shadow-md" />
+  );
   }
 };
   return (
     <div>
-      <div className=" grid lg:grid-cols-4 grid-rows-1 row-gap-4 gap-4 md:grid-cols-3 sm:grid-cols-2 relative mt-3 ">
+      <div className=" grid lg:grid-cols-4 grid-rows-1 row-gap-4 gap-5 md:grid-cols-3 sm:grid-cols-2 relative mt-3 mb-3 ">
         {data?.map((item, index) => (
           <div
             key={index}
@@ -31,11 +36,19 @@ const HomeGrid = ({ data = [] }) => {
             <div className="text-2xl font-semibold text-slate-500 ">{item.title}</div>
             {getIcon(item.title)}
             </div>
-            <div className={`text-4xl font-semibold mt-6 ${
-    item.title === "Expanse" ? "text-red-500" : "text-green-400"
-  }`}>
-              {typeof item.total === 'object' ? JSON.stringify(item.total) : item.total}
-            </div>
+            <div
+      className={`text-4xl font-semibold mt-6 ${
+        item.title === "Expanse"
+          ? "text-red-500"
+          : item.title === "Net Profit"
+          ? "text-yellow-500"
+          : "text-green-400"
+      }`}
+    >
+      {typeof item.total === "object"
+        ? JSON.stringify(item.total)
+        : item.total}
+    </div>
           </div>
         ))}
       </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MainPage from "../../component/layout/MainPage";
-import { request } from "../../util/helper";
+import { checkPermission, request } from "../../util/helper";
 import { Button, Form, Input, message, Modal, Space, Table } from "antd";
 import dayjs from "dayjs";
 
@@ -132,12 +132,14 @@ const CustomerPage = () => {
             onSearch={onSearch}
           />
         </Space>
+        {checkPermission("customer.create") &&
         <Button
           className=" bg-green-300 text-white font-semibold "
           onClick={handleOpenModal}
         >
           New
         </Button>
+        }
       </div>
       <Modal
         title={form.getFieldValue("id") ? "Update Supplier" : "New Supplier"}
@@ -271,6 +273,7 @@ const CustomerPage = () => {
                     </li>
                   </ul>
                 </details> */}
+                {checkPermission("customer.update") &&
                 <Button
                   onClick={() => handleEdit(data)}
                   type="dashed"
@@ -278,6 +281,8 @@ const CustomerPage = () => {
                 >
                   Edit
                 </Button>
+          }
+          {checkPermission("customer.rem") &&
                 <Button
                   onClick={() => handleDelete(data)}
                   type="dashed"
@@ -285,6 +290,7 @@ const CustomerPage = () => {
                 >
                   Del
                 </Button>
+          }
               </Space>
             ),
           },

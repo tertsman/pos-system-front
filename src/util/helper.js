@@ -92,7 +92,7 @@
 import axios from "axios";
 import { config } from "./config";
 import { setServerStatus } from "../Store/server.Store";
-import { getAccessToken } from "../Store/profile.store";
+import { getAccessToken, getPermission } from "../Store/profile.store";
 
 // Create axios instance
 const api = axios.create({
@@ -178,3 +178,13 @@ export const request = async (url = "", method = "get", data = {}) => {
     return err; // already normalized
   }
 };
+
+
+export const checkPermission = ( permission_name) =>{
+  const permission = getPermission();
+  const findPermission = permission?.findIndex((item)=> item.name == permission_name);
+  if (findPermission != -1){
+    return true;
+  }
+  return false
+}
